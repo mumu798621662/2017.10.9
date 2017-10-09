@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    canvas{
+        border: 1px solid red;
+    }
+
+</style>
+<body>
+
+    <canvas width="600" height="600"></canvas>
+
+
+
+
+<button class="button">撤销</button>
+
+
+</body>
+</html>
+<script>
+    let btn = document.querySelector('.button');
+    let eraser = document.querySelector('.eraser')
+    let canvas = document.querySelector('canvas');
+    let ctx = canvas.getContext('2d');
+//    ctx.fillRect(0,0,300,300);
+//    ctx.strokeRect(0,300,300,300);
+//    ctx.clearRect(10,10,280,280);
+//      ctx.fillStyle='green';
+//      ctx.fillRect(150,150,300,300);
+//      ctx.clearRect(170,170,260,260);
+//      ctx.fillStyle='red';
+//      ctx.fillRect(190,190,220,220);
+//      ctx.strokeStyle='blue';
+//      ctx.strokeRect(210,210,180,180);
+
+//    棋盘
+//    for(let i=0;i<10;i++){
+//        for(let j=0;j<10;j++){
+//            ctx.fillStyle=`rgb(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)})`
+//            ctx.fillRect(j*60,i*60,60,60)
+//        }
+//
+//    }
+
+
+//    三角形
+//    ctx.beginPath();
+//    ctx.moveTo(50,50);
+//    ctx.lineTo(50,150);
+//    ctx.lineTo(150,150);
+//    ctx.lineTo(50,50);
+//    ctx.closePath();
+//    ctx.fillStyle='red';
+//    ctx.fill();
+//
+//    ctx.beginPath();
+//    ctx.moveTo(55,50);
+//    ctx.lineTo(155,50);
+//    ctx.lineTo(155,150);
+//    ctx.lineTo(55,50);
+//    ctx.closePath();
+//    ctx.fillStyle='green';
+//    ctx.fill();
+
+
+//    圆
+//    ctx.beginPath();
+//    ctx.arc(300,300,100,0,Math.PI*2);
+//    ctx.closePath();
+//    ctx.stroke();
+//
+//    ctx.beginPath();
+//    ctx.arc(250,265,10,0,Math.PI*2);
+//    ctx.closePath();
+//    ctx.stroke();
+//
+//    ctx.beginPath();
+//    ctx.arc(350,265,10,0,Math.PI*2);
+//    ctx.closePath();
+//    ctx.stroke();
+//
+//    ctx.beginPath();
+//    ctx.arc(300,320,40,0,Math.PI);
+//    ctx.stroke();
+
+//for(let i=0;i<4;i++){
+//   for(let j=0;j<4;j++){
+//       ctx.beginPath();
+//       let end = Math.PI+Math.PI*j/2;
+//       let dir = !!(i % 2);
+//       ctx.arc((j*2+1)*30+j*20,(i*2+1)*30+i*20,30,0,end,dir);
+//       if(i>1){
+//           ctx.stroke();
+//       }
+//       else{
+//           ctx.fill();
+//       }
+//   }
+//   }
+
+//    画多边形
+     function poly(n){
+         ctx.beginPath();
+         ctx.moveTo(400,300);
+         for(let i=0;i<n;i++){
+             let x =300+100*Math.cos(Math.PI*2/n*i);
+                 y =300+100*Math.sin(Math.PI*2/n*i);
+                 ctx.lineTo(x,y);
+         }
+           ctx.closePath();
+           ctx.stroke();
+     }
+
+
+//     画多角形
+    function poly1(r,n){
+        ctx.beginPath();
+        let rad = Math.PI/n;
+        ctx.moveTo(300+r,300);
+        for(let i=0;i<2*n;i++){
+            let r1=i%2? r/2:r;
+            let x =300+r1*Math.cos(rad*i);
+            y =300+r1*Math.sin(rad*i);
+            ctx.lineTo(x,y);
+        }
+
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+
+//    画线
+    let arr=[];
+    canvas.onmousedown=function(e){
+        let cx = e.offsetX;
+        let cy = e.offsetY;
+        canvas.onmousemove=function(e){
+            let ox = e.offsetX;
+            let oy = e.offsetY;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            if(arr.length){
+                ctx.putImageData(arr[arr.length-1],0,0);
+            }
+            ctx.beginPath();
+            ctx.moveTo(cx,cy);
+            ctx.lineTo(ox,oy);
+            ctx.stroke();
+        };
+        canvas.onmouseup=function(){
+            arr.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+            canvas.onmousemove=null;
+
+
+        }
+    }
+ btn.onclick=function(){
+        if(arr.length==0){
+           return;
+        }
+        arr.pop();
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        if(arr.length){
+        ctx.putImageData(arr[arr.length-1],0,0)
+        }
+ };
+
+
+//    画圆
+//        canvas.onmousedown=function(e){
+//            let cx = e.offsetX;
+//            let cy = e.offsetY;
+//            canvas.onmousemove=function(e){
+//                let ox = e.offsetX;
+//                let oy = e.offsetY;
+//                let r = Math.sqrt(Math.pow(ox-cx,2)+Math.pow(oy-cy,2));
+//                ctx.clearRect(0,0,canvas.width,canvas.height)
+//                ctx.beginPath();
+//                ctx.arc(ox,oy,r,0,Math.PI*2);
+//                ctx.fill();
+//            }
+//        }
+
+//    铅笔
+//    canvas.onmousedown=function(e){
+//        let cx = e.offsetX;
+//        let cy = e.offsetY;
+//        canvas.onmousemove=function(e){
+//            let ox = e.offsetX;
+//            let oy = e.offsetY;
+//            ctx.beginPath();
+//            ctx.moveTo(cx,cy);
+//            ctx.lineTo(ox,oy);
+//            cx=ox;
+//            cy=oy;
+//            ctx.stroke();
+//        }
+//        canvas.onmouseup=function(){
+//            canvas.onmousemove=null;
+//        }
+//}
+
+//    canvas.onmousedown=function(e){
+//        let cx = e.offsetX;
+//        let cy = e.offsetY;
+//        ctx.beginPath();
+//        ctx.moveTo(cx,cy);
+//        canvas.onmousemove=function(e){
+//            let ox = e.offsetX;
+//            let oy = e.offsetY;
+//
+//            ctx.lineTo(ox,oy);
+//            ctx.stroke();
+//        }
+//        canvas.onmouseup=function(){
+//            canvas.onmousemove=null;
+//        }
+//    }
+
+//画多边形
+//    canvas.onmousedown=function(){
+//
+//    }
+</script>

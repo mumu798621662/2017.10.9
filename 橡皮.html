@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    canvas{
+        border: 1px solid red;
+    }
+    .box{
+        width: 600px;
+        height: 600px;
+        position: relative;
+    }
+    .eraser{
+        width: 50px;
+        height: 50px;
+        background: #df5000;
+        position: absolute;
+        top:0;
+        left: 0;
+        display: none;
+    }
+    .opc{
+        width: 600px;
+        height: 600px;
+        background: green;
+        position: absolute;
+        top:0;
+        left: 0;
+        z-index: 999;
+        opacity:0;
+    }
+</style>
+<body>
+<div class="box">
+    <canvas width="600" height="600"></canvas>
+    <div class="eraser"></div>
+    <div class="opc"></div>
+
+</div>
+
+</body>
+</html>
+<script>
+    let eraser = document.querySelector('.eraser');
+    let opc = document.querySelector('.opc');
+    console.log(eraser)
+    let canvas = document.querySelector('canvas');
+    let ctx = canvas.getContext('2d');
+    function poly1(r,n){
+        ctx.beginPath();
+        let rad = Math.PI/n;
+        ctx.moveTo(300+r,300);
+        for(let i=0;i<2*n;i++){
+            let r1=i%2? r/2:r;
+            let x =300+r1*Math.cos(rad*i);
+            y =300+r1*Math.sin(rad*i);
+            ctx.lineTo(x,y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+    poly1(150,5);
+
+  opc.onmousedown=function(){
+     eraser.style.display='block';
+     opc.onmousemove=function(e){
+         let ox = e.offsetX-25;
+         let oy = e.offsetY-25;
+         eraser.style.left=`${ox}px`;
+         eraser.style.top=`${oy}px`;
+         ctx.clearRect(ox,oy,eraser.offsetWidth,eraser.offsetHeight);
+     }
+
+};
+    opc.onmouseup=function(){
+        eraser.style.display='none';
+    }
+</script>
